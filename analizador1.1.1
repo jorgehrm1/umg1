@@ -1,0 +1,168 @@
+import java.io.*;
+
+class tipos
+{
+	private int cont;
+	private String tipo;
+	private String cualesSon;
+
+	public tipos(int cont,String tipo,String cualesSon)
+	{
+		setCont(cont);
+		setTipo(tipo);
+		setCualesSon(cualesSon);	
+	}
+	public void setCont(int cont)
+	{
+		this.cont=cont;
+	}
+
+	public void setTipo(String tipo)
+	{
+		this.tipo=tipo;
+	}
+	public void setCualesSon(String cualesSon)
+	{
+		this.cualesSon=cualesSon;
+	}
+
+	public int getCont()
+	{
+		return cont;
+	}
+
+	public String getTipo()
+	{
+		return tipo;
+	}
+	public String getCualesSon()
+	{
+		return cualesSon;
+	}
+
+
+	public void verTipos()
+	{
+		System.out.println("Los " + getTipo() + " son " + getCont() + " '"+getCualesSon()+"'");
+	}
+}
+class lexer
+{
+	
+
+	private Character tokens[]=  
+		{
+		'=','(',')','+','-','*','/',';','<','>'
+		};
+
+	private	Character au='x';
+
+	
+	public void instrucciones()
+	{	
+		
+		System.out.print("Analizador lexico!!                                            *\n");
+		System.out.print("Introduce la cadena o expresion que quieras analizar      *\n");
+		System.out.print("Pulsa  Enter        *\n");
+
+		System.out.println();
+	}
+
+	public Character[] leer()
+	{
+		String res="";
+		int longitud=0;
+		Character ch[];
+		BufferedReader in=new BufferedReader(new InputStreamReader(System.in));
+		try{
+			System.out.print("Introduce la Expresion: ");
+			do{
+			res+=in.readLine();
+			}while(!res.endsWith(" "));
+		}catch(IOException ioe)
+		{
+			System.out.println("Ocurrio un error" +ioe);
+		}
+		longitud=res.length();
+		ch=new Character[longitud];
+		for(int i=0;i<longitud;i++)
+		{
+			ch[i]=res.charAt(i);
+		}
+	return ch;
+	}
+
+
+	public void esDigito(Character ch[])
+	{
+		int cont=0;
+		String cualesSon="";
+		for(int i=0;i<ch.length;i++)
+		{
+			if(au.isDigit(ch[i]))
+			{
+				cont++;
+				cualesSon+=ch[i].toString() + " ";
+			}
+		}
+	tipos out=new tipos(cont,"Digitos",cualesSon);
+	out.verTipos();
+	}
+
+	
+	public void esToken(Character ch[])
+	{
+		int ope=0;
+		String cualesSon="";
+		for(int i=0;i<ch.length;i++)
+		{
+			for(int j=0;j<tokens.length;j++)
+			{
+				if(ch[i].equals(tokens[j]))
+				{
+					ope++;
+					cualesSon+=ch[i].toString() + " ";	
+				}			
+			}
+		}
+	tipos out=new tipos(ope,"Tokens",cualesSon);
+	out.verTipos();
+	}
+
+	
+
+	public void esIdentificador(Character ch[])
+	{
+		int Id=0;
+		String cualesSon="";
+		for(int i=0;i<ch.length;i++)
+		{
+			if(au.isJavaIdentifierStart(ch[i]))
+			{
+				Id++;
+				cualesSon+=ch[i].toString() + " ";
+			}
+		}
+	tipos out=new tipos(Id,"Identificadores",cualesSon);
+	out.verTipos();	
+	}
+
+	
+	
+}
+
+
+class analizador
+{
+	public static void main(String carls[])
+	{	
+		Character in[];
+		lexer prueba=new lexer();
+		prueba.instrucciones();
+		in=prueba.leer();
+		prueba.esIdentificador(in);
+		prueba.esToken(in);
+		prueba.esDigito(in);
+	
+	}
+}
